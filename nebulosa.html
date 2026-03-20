@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lavandería Nebulosa · Cali — La lavandería que se mueve</title>
+<link rel="stylesheet" href="nebulosa.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&family=DM+Mono:ital@0;1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ══ BURBUJAS FONDO ══ -->
+<div class="burbujas-bg" id="burbujasBg"></div>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="nav-nebulosa" id="navNebulosa">
+  <div class="nn-logo">
+    <div class="nn-icon-wrap">
+      <canvas id="miniLavadora" width="36" height="36"></canvas>
+    </div>
+    <div>
+      <span class="nn-name">NEBULOSA</span>
+      <span class="nn-sub">Lavandería</span>
+    </div>
+  </div>
+  <div class="nn-links">
+    <a href="#hero"       class="nn-link">Inicio</a>
+    <a href="#maquinas"   class="nn-link">Máquinas</a>
+    <a href="#manchas"    class="nn-link">Manchas</a>
+    <a href="#rastreo"    class="nn-link">Tu Ropa</a>
+    <a href="#servicios"  class="nn-link">Servicios</a>
+    <a href="#domicilio"  class="nn-link">Domicilio</a>
+  </div>
+  <div class="nn-right">
+    <div class="nn-turno" id="nnTurno">🎫 Turno: <span id="turnoActual">—</span></div>
+    <button class="nn-cta" onclick="abrirModalTurno()">Pedir Turno</button>
+    <button class="nn-ham" id="nnHam"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+<div class="nn-mob" id="nnMob">
+  <a href="#hero"      onclick="closeMob()">Inicio</a>
+  <a href="#maquinas"  onclick="closeMob()">Máquinas</a>
+  <a href="#manchas"   onclick="closeMob()">Manchas</a>
+  <a href="#rastreo"   onclick="closeMob()">Tu Ropa</a>
+  <a href="#servicios" onclick="closeMob()">Servicios</a>
+  <a href="#domicilio" onclick="closeMob()">Domicilio</a>
+</div>
+
+<!-- ══════════════════════════
+     HERO
+══════════════════════════ -->
+<section class="section-hero" id="hero">
+  <div class="hero-layout">
+    <div class="hero-texto">
+      <div class="ht-badge">✦ Cali · Desde 2018</div>
+      <h1 class="ht-titulo">
+        <span>La ropa</span>
+        <span class="ht-azul">más limpia</span>
+        <span>del barrio.</span>
+      </h1>
+      <p class="ht-desc">
+        Lavamos, secamos y planchamos con amor y con tecnología.
+        Trae tu ropa o pedimos domicilio — tú dices.
+      </p>
+      <div class="ht-stats">
+        <div class="hts"><span class="hts-n" data-target="6">0</span><span>Máquinas</span></div>
+        <div class="hts-sep">·</div>
+        <div class="hts"><span class="hts-n" data-target="340">0</span><span>Clientes/mes</span></div>
+        <div class="hts-sep">·</div>
+        <div class="hts"><span class="hts-n" data-target="4">0</span><span>Kg mínimo</span></div>
+      </div>
+      <div class="ht-btns">
+        <button class="btn-neb" onclick="document.getElementById('domicilio').scrollIntoView({behavior:'smooth'})">
+          🛵 Pedir Domicilio
+        </button>
+        <button class="btn-ghost-neb" onclick="abrirModalTurno()">
+          🎫 Pedir Turno en Local
+        </button>
+      </div>
+      <!-- Mini horario -->
+      <div class="ht-horario">
+        <div class="hth-row"><span>Lun – Sáb</span><span class="hth-h">7:00 AM – 7:00 PM</span></div>
+        <div class="hth-row"><span>Domingo</span><span class="hth-h">8:00 AM – 3:00 PM</span></div>
+        <div class="hth-estado" id="hthEstado">● Calculando...</div>
+      </div>
+    </div>
+
+    <!-- Lavadoras hero -->
+    <div class="hero-maquinas">
+      <canvas id="heroCanvas" class="hero-canvas"></canvas>
+      <div class="hm-burbujas" id="hmBurbujas"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER FLOTANTE -->
+<div class="ticker-barra">
+  <div class="ticker-inner" id="tickerInner">
+    🧺 Lavado normal · $8.000/kg &nbsp;·&nbsp; ✨ Lavado especial · $12.000/kg &nbsp;·&nbsp; 👔 Planchado · $3.500/prenda &nbsp;·&nbsp; 🛵 Domicilio gratis +$50.000 &nbsp;·&nbsp; 🎫 Turno digital, sin filas &nbsp;·&nbsp; 🧺 Lavado normal · $8.000/kg &nbsp;·&nbsp; ✨ Lavado especial · $12.000/kg &nbsp;·&nbsp;
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     MÁQUINAS EN VIVO
+══════════════════════════ -->
+<section class="section-maquinas" id="maquinas">
+  <div class="container">
+    <div class="titulo-neb">
+      <div class="tn-badge">EN VIVO</div>
+      <h2>Estado de las Máquinas</h2>
+      <p>Mira en tiempo real qué máquinas están disponibles ahora mismo.</p>
+    </div>
+
+    <div class="maquinas-grid" id="maquinasGrid"></div>
+
+    <!-- Panel de simulación -->
+    <div class="sim-panel">
+      <div class="sp-titulo">
+        <span>🎮</span>
+        <div>
+          <strong>Simulador de lavado</strong>
+          <p>Agrega prendas y ve cómo se llena la máquina</p>
+        </div>
+      </div>
+      <div class="sim-layout">
+        <div class="sim-prendas">
+          <div class="spp-titulo">Arrastra prendas a la lavadora</div>
+          <div class="prendas-disponibles" id="prendasDisponibles"></div>
+        </div>
+        <div class="sim-lavadora-wrap">
+          <canvas id="simCanvas" width="220" height="220" class="sim-canvas"></canvas>
+          <div class="sim-info">
+            <div class="si-item"><span>Prendas:</span><strong id="simCant">0</strong></div>
+            <div class="si-item"><span>Peso est.:</span><strong id="simPeso">0 kg</strong></div>
+            <div class="si-item"><span>Precio est.:</span><strong id="simPrecio">$0</strong></div>
+            <div class="si-item"><span>Tiempo:</span><strong id="simTiempo">— min</strong></div>
+          </div>
+          <button class="btn-neb" style="width:100%;margin-top:8px" onclick="resetSim()">Vaciar máquina</button>
+        </div>
+        <div class="sim-seleccion">
+          <div class="spp-titulo">Tu carga actual</div>
+          <div class="carga-lista" id="cargaLista"><p class="carga-empty">Vacío — agrega prendas →</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     CALCULADORA DE MANCHAS
+══════════════════════════ -->
+<section class="section-manchas" id="manchas">
+  <div class="container">
+    <div class="titulo-neb">
+      <div class="tn-badge">HERRAMIENTA</div>
+      <h2>¿Qué mancha tienes?</h2>
+      <p>Dinos qué le pasó a tu ropa y te decimos exactamente qué necesitas.</p>
+    </div>
+
+    <div class="manchas-layout">
+      <div class="manchas-panel">
+        <!-- Figura de prenda interactiva -->
+        <div class="prenda-figura">
+          <svg viewBox="0 0 280 360" xmlns="http://www.w3.org/2000/svg" class="pf-svg" id="pfSvg">
+            <!-- Camiseta -->
+            <path d="M80 80 L40 140 L80 150 L80 300 L200 300 L200 150 L240 140 L200 80 L170 100 Q140 115 110 100 Z" fill="white" stroke="#c8d8f0" stroke-width="2"/>
+            <!-- Zonas de mancha clickeables -->
+            <circle id="zona-hombro-izq" cx="95"  cy="120" r="22" fill="rgba(0,150,255,0)" class="zona-mancha" data-zona="Hombro izquierdo" onclick="selZona(this)"/>
+            <circle id="zona-hombro-der" cx="185" cy="120" r="22" fill="rgba(0,150,255,0)" class="zona-mancha" data-zona="Hombro derecho"  onclick="selZona(this)"/>
+            <circle id="zona-pecho"      cx="140" cy="170" r="28" fill="rgba(0,150,255,0)" class="zona-mancha" data-zona="Pecho / frente"   onclick="selZona(this)"/>
+            <circle id="zona-centro"     cx="140" cy="230" r="24" fill="rgba(0,150,255,0)" class="zona-mancha" data-zona="Centro / barriga"  onclick="selZona(this)"/>
+            <circle id="zona-manga-izq"  cx="58"  cy="160" r="18" fill="rgba(0,150,255,0)" class="zona-mancha" data-zona="Manga izquierda"  onclick="selZona(this)"/>
+            <circle id="zona-manga-der"  cx="222" cy="160" r="18" fill="rgba(0,150,255,0)" class="zona-mancha" data-zona="Manga derecha"    onclick="selZona(this)"/>
+            <circle id="zona-espalda"    cx="140" cy="280" r="26" fill="rgba(0,150,255,0)" class="zona-mancha" data-zona="Parte baja"       onclick="selZona(this)"/>
+            <!-- Etiquetas -->
+            <text x="140" y="355" text-anchor="middle" font-family="'Space Grotesk'" font-size="11" fill="#7090b0">Haz clic en la zona afectada</text>
+          </svg>
+          <div class="pf-zona-sel" id="pfZonaSel">Ninguna zona seleccionada</div>
+        </div>
+
+        <!-- Selector de manchas -->
+        <div class="tipo-mancha-grid" id="tipoManchaGrid"></div>
+        <button class="btn-neb" style="width:100%;margin-top:14px" onclick="calcularMancha()" id="btnCalcMancha" disabled>
+          🔬 Analizar mi mancha
+        </button>
+      </div>
+
+      <!-- Resultado del análisis -->
+      <div class="mancha-resultado" id="manchaResultado">
+        <div class="mr-placeholder">
+          <span>👕</span>
+          <p>Selecciona la zona de tu prenda y el tipo de mancha para ver el diagnóstico.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     RASTREADOR DE ROPA
+══════════════════════════ -->
+<section class="section-rastreo" id="rastreo">
+  <div class="container">
+    <div class="titulo-neb light">
+      <div class="tn-badge">NUEVO</div>
+      <h2>Rastrea Tu Ropa</h2>
+      <p>Ingresa el número de tu ticket y ve en qué ciclo está tu lavado.</p>
+    </div>
+
+    <div class="rastreo-layout">
+      <div class="rastreo-input-wrap">
+        <div class="rit-titulo">Ingresa tu número de ticket</div>
+        <div class="rit-campo">
+          <span class="rit-hash">#</span>
+          <input type="text" id="ticketInput" class="ticket-input" placeholder="Ej: 4821" maxlength="5" oninput="this.value=this.value.replace(/\D/g,'')"/>
+          <button class="btn-neb" onclick="rastrearRopa()">Rastrear</button>
+        </div>
+        <div class="rit-hint">Número de 4 dígitos en tu recibo</div>
+        <!-- Tickets de ejemplo para probar -->
+        <div class="tickets-ejemplo">
+          <span>Prueba con:</span>
+          <button onclick="probarTicket('1234')">1234</button>
+          <button onclick="probarTicket('5678')">5678</button>
+          <button onclick="probarTicket('9012')">9012</button>
+        </div>
+      </div>
+
+      <!-- Timeline de estado -->
+      <div class="rastreo-resultado" id="rastreoResultado">
+        <div class="rr-placeholder">
+          <span>🔍</span>
+          <p>Tu estado de lavado aparecerá aquí</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proceso visual animado -->
+    <div class="proceso-visual" id="procesoVisual" style="display:none">
+      <div class="pv-steps" id="pvSteps"></div>
+      <div class="pv-lavadora">
+        <canvas id="rastreoCanvas" width="180" height="180"></canvas>
+        <div class="pv-lav-label" id="pvLavLabel">Máquina #3</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     SERVICIOS
+══════════════════════════ -->
+<section class="section-servicios" id="servicios">
+  <div class="container">
+    <div class="titulo-neb">
+      <div class="tn-badge">PRECIOS</div>
+      <h2>Nuestros Servicios</h2>
+      <p>Claros, justos y sin sorpresas.</p>
+    </div>
+    <div class="servicios-grid" id="serviciosGrid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════
+     DOMICILIO
+══════════════════════════ -->
+<section class="section-domicilio" id="domicilio">
+  <div class="container">
+    <div class="titulo-neb light">
+      <div class="tn-badge">DOMICILIO</div>
+      <h2>Recogemos y Entregamos</h2>
+      <p>Pedimos tu ropa, la lavamos, y la devolvemos lista. Tú solo esperas.</p>
+    </div>
+
+    <div class="dom-strips">
+      <div class="ds"><span>⏱</span><strong>Recogida en 2h</strong><em>desde tu pedido</em></div>
+      <div class="ds"><span>🎁</span><strong>Entrega gratis</strong><em>en pedidos +$50.000</em></div>
+      <div class="ds"><span>📍</span><strong>Granada · Versalles · El Peñón · San Antonio · Alameda</strong><em>cobertura</em></div>
+      <div class="ds"><span>⚡</span><strong>Express disponible</strong><em>entrega en 24h</em></div>
+    </div>
+
+    <div class="dom-layout">
+      <!-- Formulario -->
+      <div class="dom-form-wrap">
+        <!-- Calculadora de precio antes del formulario -->
+        <div class="calculadora-precio">
+          <div class="cp-titulo">🧮 Calcula tu precio antes de pedir</div>
+          <div class="cp-row">
+            <label>¿Cuántos kilos aproximados?</label>
+            <div class="cp-qty">
+              <button onclick="cambiarKg(-1)">−</button>
+              <span id="cpKg">4</span> kg
+              <button onclick="cambiarKg(1)">+</button>
+            </div>
+          </div>
+          <div class="cp-row">
+            <label>Tipo de lavado</label>
+            <select id="cpTipo" class="neb-input" onchange="calcularPrecio()">
+              <option value="8000">Normal ($8.000/kg)</option>
+              <option value="12000">Especial ($12.000/kg)</option>
+              <option value="15000">Delicado ($15.000/kg)</option>
+            </select>
+          </div>
+          <div class="cp-row">
+            <label>¿Agregar planchado?</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="cpPlanchado" onchange="calcularPrecio()"/>
+              <span class="ts-slider"></span>
+            </label>
+          </div>
+          <div class="cp-resultado">
+            <div class="cpr-row"><span>Lavado</span><strong id="cprLavado">$32.000</strong></div>
+            <div class="cpr-row"><span>Planchado</span><strong id="cprPlanchado">—</strong></div>
+            <div class="cpr-row"><span>Domicilio</span><strong id="cprDom">$5.000</strong></div>
+            <div class="cpr-total"><span>ESTIMADO</span><strong id="cprTotal">$37.000</strong></div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="dom-form">
+          <div class="df-titulo">📋 Datos del Pedido</div>
+          <div class="df-grid">
+            <div class="dfg-field"><label>Nombre</label><input type="text"  id="dNombre"   placeholder="Tu nombre"        class="neb-input"/></div>
+            <div class="dfg-field"><label>Teléfono</label><input type="tel" id="dTelefono" placeholder="WhatsApp"         class="neb-input"/></div>
+            <div class="dfg-field"><label>Dirección</label><input type="text" id="dDir"    placeholder="Dirección exacta" class="neb-input"/></div>
+            <div class="dfg-field"><label>Barrio</label><input type="text"   id="dBarrio"  placeholder="¿En qué barrio?"  class="neb-input"/></div>
+            <div class="dfg-field" style="grid-column:1/-1">
+              <label>¿Algo especial para tu ropa?</label>
+              <textarea id="dNota" placeholder="Manchas específicas, prendas delicadas, alergias a productos..." class="neb-input" rows="2"></textarea>
+            </div>
+          </div>
+
+          <!-- PAGO -->
+          <div class="pago-section">
+            <div class="ps-titulo">💳 Método de Pago</div>
+            <div class="ps-grid">
+              <div class="ps-opt" onclick="selPago('efectivo',this)">
+                <div class="pso-ind" id="psi-efectivo"></div>
+                <span>💵</span>
+                <div><span class="pso-name">Efectivo</span><span class="pso-sub">Al recibir</span></div>
+              </div>
+              <div class="ps-opt" onclick="selPago('nequi',this)">
+                <div class="pso-ind" id="psi-nequi"></div>
+                <span><svg width="26" height="26" viewBox="0 0 26 26"><rect width="26" height="26" rx="6" fill="#6C0CE0"/><text x="13" y="19" text-anchor="middle" font-family="Arial Black" font-size="11" font-weight="900" fill="white">N</text></svg></span>
+                <div><span class="pso-name">Nequi</span><span class="pso-sub">321 456 7890</span></div>
+              </div>
+              <div class="ps-opt" onclick="selPago('daviplata',this)">
+                <div class="pso-ind" id="psi-daviplata"></div>
+                <span><svg width="26" height="26" viewBox="0 0 26 26"><rect width="26" height="26" rx="6" fill="#E30613"/><text x="13" y="18" text-anchor="middle" font-family="Arial Black" font-size="9" font-weight="900" fill="white">DV</text></svg></span>
+                <div><span class="pso-name">Daviplata</span><span class="pso-sub">321 456 7890</span></div>
+              </div>
+              <div class="ps-opt" onclick="selPago('transfer',this)">
+                <div class="pso-ind" id="psi-transfer"></div>
+                <span>🏦</span>
+                <div><span class="pso-name">Transferencia</span><span class="pso-sub">PSE / Banco</span></div>
+              </div>
+            </div>
+            <div class="ps-copy" id="psCopy" style="display:none">
+              <span id="psCopyLabel">Número:</span>
+              <strong>321 456 7890</strong>
+              <button onclick="copiarNum()">📋 Copiar</button>
+            </div>
+            <div class="ps-msg" id="psMsg"></div>
+          </div>
+
+          <button class="btn-neb" style="width:100%" onclick="confirmarDomicilio()">🛵 Confirmar Pedido de Domicilio</button>
+          <a class="btn-wa-neb" href="https://wa.me/573214567890" target="_blank">
+            <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- Panel resumen -->
+      <div class="dom-resumen">
+        <div class="dr-header">🧺 Resumen de tu Pedido</div>
+        <div class="dr-data">
+          <div class="drd"><span>Kilos</span><strong id="drKg">4 kg</strong></div>
+          <div class="drd"><span>Tipo lavado</span><strong id="drTipo">Normal</strong></div>
+          <div class="drd"><span>Planchado</span><strong id="drPlanch">No</strong></div>
+          <div class="drd"><span>Pago</span><strong id="drPago">—</strong></div>
+          <div class="drd total"><span>ESTIMADO</span><strong id="drTotal">$37.000</strong></div>
+        </div>
+        <div class="dr-proceso">
+          <div class="drp-titulo">📦 El proceso</div>
+          <div class="drp-step"><span>1</span> Recoges / Llevamos a buscarte</div>
+          <div class="drp-step"><span>2</span> Lavado, secado y doblado</div>
+          <div class="drp-step"><span>3</span> Te avisamos cuando está lista</div>
+          <div class="drp-step"><span>4</span> Entrega en tu puerta</div>
+        </div>
+        <div class="dr-horario">
+          <div class="drh-t">⏰ Horario</div>
+          <div class="drh-r"><span>Lun–Sáb</span><span>7AM–7PM</span></div>
+          <div class="drh-r"><span>Domingo</span><span>8AM–3PM</span></div>
+        </div>
+        <div class="dr-dir">📍 Cra 11 #46-32 · Granada · Cali</div>
+        <a class="btn-wa-neb" href="https://wa.me/573214567890" target="_blank" style="display:flex">
+          <i class="fab fa-whatsapp"></i> WhatsApp directo
+        </a>
+        <!-- Fundadores -->
+        <div class="dr-fundadores">
+          <div class="drf-t">El equipo</div>
+          <div class="drf-row"><div class="drf-av" style="background:#4a90e8">JJ</div><div><strong>Jhon Jairo Parra</strong><span>Fundador & Jefe de operaciones</span></div></div>
+          <div class="drf-row"><div class="drf-av" style="background:#50c878">SB</div><div><strong>Sebastián Banguera</strong><span>Co-fundador & Atención al cliente</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL DOMICILIO CONFIRMADO -->
+<div class="modal-neb" id="modalDom">
+  <div class="mn-box">
+    <div class="mn-header">🛵 ¡Pedido Confirmado!</div>
+    <div class="mn-body">
+      <div class="mn-icon">🧺✨</div>
+      <h3>¡Ya viene en camino!</h3>
+      <div class="mn-detalle" id="mnDetalle"></div>
+      <p class="mn-tiempo">Recogemos tu ropa en las próximas <strong>2 horas</strong>.</p>
+      <button class="btn-neb" onclick="cerrarModal('modalDom')">¡Perfecto!</button>
+    </div>
+  </div>
+  <div class="mn-bg" onclick="cerrarModal('modalDom')"></div>
+</div>
+
+<!-- MODAL TURNO -->
+<div class="modal-neb" id="modalTurno">
+  <div class="mn-box">
+    <div class="mn-header">🎫 Sorteo de Turno</div>
+    <div class="mn-body" id="turnoBody">
+      <p style="font-family:'Space Grotesk';font-size:0.9rem;color:#5a7090;margin-bottom:16px">
+        Ingresa tu nombre y giraremos el tambor para asignarte un turno.
+      </p>
+      <input type="text" id="turnoNombre" placeholder="Tu nombre" class="neb-input" style="margin-bottom:12px"/>
+      <canvas id="tamborCanvas" width="280" height="280" class="tambor-canvas"></canvas>
+      <div class="turno-resultado" id="turnoResultado" style="display:none">
+        <div class="tr-numero" id="trNumero">—</div>
+        <div class="tr-label">Tu número de turno</div>
+        <div class="tr-espera" id="trEspera">—</div>
+      </div>
+      <div class="turno-btns">
+        <button class="btn-neb" id="btnGirar" onclick="girarTambor()">🎫 ¡Girar!</button>
+        <button class="btn-ghost-neb" onclick="cerrarModal('modalTurno')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <div class="mn-bg" onclick="cerrarModal('modalTurno')"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-neb">
+  <div class="fn-inner">
+    <div class="fn-brand">
+      <canvas id="footerLav" width="40" height="40"></canvas>
+      <div>
+        <div class="fn-name">NEBULOSA</div>
+        <div class="fn-sub">Lavandería · Cali · 2018</div>
+      </div>
+    </div>
+    <p class="fn-frase">"Cada prenda merece una segunda oportunidad."</p>
+    <div class="fn-social">
+      <a href="#"><i class="fab fa-whatsapp"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-tiktok"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+    </div>
+    <div class="fn-copy">© 2024 Lavandería Nebulosa · Cra 11 #46-32 · Granada · Cali, Colombia</div>
+  </div>
+</footer>
+
+<script src="nebulosa.js"></script>
+</body>
+</html>
